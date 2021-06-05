@@ -12,21 +12,21 @@ public class EventoController : ControllerBase
     {
         public IEnumerable<Evento> _evento = new Evento[] {
             new Evento() {
-               EventoId = 1,
+               Id = 1,
                Tema = "Angular 11 e .NET 5",
                Local = "São Paulo",
                Lote = "1º Lote",
                QtdPessoas = 200,
-               DataEvento = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy"),
+               DataEvento = DateTime.Now.AddDays(2),
                ImagemURL = "foto.png"
                },
                 new Evento() {
-               EventoId = 2,
+               Id = 2,
                Tema = ".NET CORE 5",
                Local = "São Bernardo",
                Lote = "1º Lote",
                QtdPessoas = 300,
-               DataEvento = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"),
+               DataEvento = DateTime.Now.AddDays(3),
                ImagemURL = "foto1.png"
                }
            }; 
@@ -45,7 +45,7 @@ public class EventoController : ControllerBase
         [HttpGet("{id}")]
         public IEnumerable<Evento> GetById(int id)
         {
-           return _evento.Where(Evento => Evento.EventoId == id);
+           return _evento.Where(Evento => Evento.Id == id);
         }
 
         [HttpPost]
