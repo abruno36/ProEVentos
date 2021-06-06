@@ -1,7 +1,69 @@
-<h1>Eventos</h1>
+<h2>Eventos</h2>
+<hr>
 
-<div *ngFor="let evento of eventos">
-    <p><b>Tema:</b> {{evento.tema}}</p>
-    <p><b>Local:</b> {{evento.local}}</p>
-    <hr>
+<div class="d-flex">
+    <div class="form-inline mr-auto">
+      <div class="form-group mb-2">
+        <label class="mr-2">Filtro:</label> <input type="text" class="form-control mr-2" placeholder="buscar"
+          [(ngModel)]="filtroLista">
+      </div>
+    </div>
 </div>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                <button class="btn btn-outline-light" (click)="alternarImagem()">
+                    <i class="{{mostrarImagem ? 'fa fa-eye-slash' : 'fa fa-eye'}}"></i>
+                </button>
+            </th>
+            <th>#</th>
+            <th>Tema</th>
+            <th>Local</th>
+            <th>Data</th>
+            <th>Qtde Pessoas</th>
+            <th colspan="2" class="text-center">Opções</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="eventos && eventos.length">
+        <tr *ngFor="let evento of eventosFiltrados">
+            <td>
+                <img [collapse]="!mostrarImagem" [isAnimated]="true" src="/assets/{{evento.imagemURL}}"
+                [style.width.px]="imagemLargura" [style.margin.px]="imagemMargem">
+            </td>
+            <td>{{evento.id}}</td>
+            <td>{{evento.tema}}</td>
+            <td>{{evento.local}}</td>
+            <td>{{evento.dataEvento}}</td>
+            <td>{{evento.qtdPessoas}}</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-success" tooltip="Editar" >
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger" tooltip="Excluir"  style="margin-left: 5px;">
+                        <i class="fa fa-eraser"></i>
+                    </button>
+                </div>
+            </td>
+            <td>
+                <a  tooltip="Edição Detalhada" class="btn btn-sm btn-warning">
+                    <i class="fa fa-edit"></i>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot *ngIf="!eventos">
+    <tr>
+      <td colspan="7" class="text-center">
+        <h4>
+          Nenhum evento encontrado!
+        </h4>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+<!-- para saber os nomes dos campo --> 
+<!-- {{eventos | json}} -->
