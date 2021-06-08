@@ -35,7 +35,7 @@ namespace ProEventos.Application.Dtos
         public string Email { get; set; }
 
         public IEnumerable<LoteDto> Lotes { get; set; }
-        public IEnumerable<RedeSocialDto> RedesSociais { get; set; }
+        public IEnumerable<RedeSocialDto> RedeSociais { get; set; }
         public IEnumerable<PalestranteDto> Palestrantes { get; set; }
 
     }
