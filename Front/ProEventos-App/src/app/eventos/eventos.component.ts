@@ -1,30 +1,56 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, Validators, FormBuilder  } from '@angular/forms';
+import { Evento } from '../models/Evento';
+import { EventoService } from '../services/evento.service';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule,BsModalService } from 'ngx-bootstrap/modal';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
+//import { BsLocaleService } from 'ngx-bootstrap/';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-eventos',
   templateUrl: './eventos.component.html',
-  styleUrls: ['./eventos.component.scss']
+  styleUrls: ['./eventos.component.scss'],
+  //providers: [EventoService] //- 2a maneira
 })
 export class EventosComponent implements OnInit {
 
-  public eventos: any = [];
-  public eventosFiltrados: any = [];
-  imagemLargura = 50;
-  imagemMargem = 2;
-  mostrarImagem = false;
-  private _filtroLista: string = '';
+  public eventos: Evento[] = [];
+  public eventosFiltrados: Evento[] = [];
+  public imagemLargura = 50;
+  public imagemMargem = 2;
+  public mostrarImagem = false;
+  private filtroListado: string = '';
+  public modoSalvar = 'post';
+  public registerForm!: FormGroup;
+  public evento: Evento | undefined;
+  public bodyDeletarEvento = '';
 
   public get filtroLista(): string {
-    return this._filtroLista;
+    return this.filtroListado;
   }  
 
+  constructor(private eventoService: EventoService) {}
+
   public set filtroLista(value: string) {
-    this._filtroLista = value;
+    this.filtroListado = value;
     this.eventosFiltrados = this.filtroLista ? this.filtrarEventos(this.filtroLista) : this.eventos;
   }
 
-  filtrarEventos(filtrarPor: string): any {
+
+
+  //excluirEvento(evento: Evento, template: any) {
+  //  this.openModal(template);
+  //  this.evento = evento;
+  //  this.bodyDeletarEvento = `Tem certeza que deseja excluir o Evento: ${evento.tema}, Código: ${evento.id}`;
+  //}
+
+
+
+  public filtrarEventos(filtrarPor: string): Evento[] {
     filtrarPor = filtrarPor.toLocaleLowerCase();
     return this.eventos.filter(
         (evento: any) => evento.tema.toLocaleLowerCase().indexOf(filtrarPor) !== -1 ||
@@ -32,24 +58,22 @@ export class EventosComponent implements OnInit {
     );
   }
 
-  constructor(private http: HttpClient) { }
-
   ngOnInit() {
     this.getEventos();
   }
 
-  alternarImagem() {
+  public alternarImagem(): void {
     this.mostrarImagem = !this.mostrarImagem;
   }
 
   public getEventos(): void {
-      this.http.get('https://localhost:5001/api/eventos').subscribe(
-      Response => {
-        this.eventos = Response;
-        this.eventosFiltrados = this.eventos
+      this.eventoService.getEventos().subscribe({
+      next: (_eventos: Evento[]) => {
+        this.eventos = _eventos;
+        this.eventosFiltrados = this.eventos;
       },
-      error => console.log(error)
-    );
+      error: (error: any) => console.log(error)
+    });
   }
 
 }
