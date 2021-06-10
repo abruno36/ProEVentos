@@ -8,8 +8,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { NgxSpinnerService } from 'ngx-spinner';
 
-import { Evento } from '../models/Evento';
-import { EventoService } from '../services/evento.service';
+import { Evento } from '../../app/models/Evento';
+import { EventoService } from '../../app/services/evento.service';
 
 @Component({
   selector: 'app-eventos',
