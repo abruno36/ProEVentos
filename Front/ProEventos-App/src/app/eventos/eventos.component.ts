@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+
 import { FormGroup, Validators, FormBuilder  } from '@angular/forms';
-import { Evento } from '../models/Evento';
-import { EventoService } from '../services/evento.service';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ModalModule,BsModalService } from 'ngx-bootstrap/modal';
-import { defineLocale } from 'ngx-bootstrap/chronos';
-import { ptBrLocale } from 'ngx-bootstrap/locale';
-//import { BsLocaleService } from 'ngx-bootstrap/';
 import { ToastrService } from 'ngx-toastr';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { NgxSpinnerService } from 'ngx-spinner';
+
+import { Evento } from '../models/Evento';
+import { EventoService } from '../services/evento.service';
 
 @Component({
   selector: 'app-eventos',
@@ -17,6 +18,7 @@ import { ToastrService } from 'ngx-toastr';
   //providers: [EventoService] //- 2a maneira
 })
 export class EventosComponent implements OnInit {
+  [x: string]: any;
 
   public eventos: Evento[] = [];
   public eventosFiltrados: Evento[] = [];
@@ -28,12 +30,22 @@ export class EventosComponent implements OnInit {
   public registerForm!: FormGroup;
   public evento: Evento | undefined;
   public bodyDeletarEvento = '';
+  modalRef = {} as BsModalRef;
 
   public get filtroLista(): string {
     return this.filtroListado;
   }  
 
-  constructor(private eventoService: EventoService) {}
+  constructor(
+    private eventoService: EventoService
+    , private modalService: BsModalService
+    //, private fb: FormBuilder
+    , private localeService: BsLocaleService
+    , private toastr: ToastrService
+    , private spinner: NgxSpinnerService
+    ) {
+      this.localeService.use('pt-br');
+    }
 
   public set filtroLista(value: string) {
     this.filtroListado = value;
@@ -59,8 +71,23 @@ export class EventosComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.spinner.show();
     this.getEventos();
   }
+
+  openModal(template: TemplateRef<any>): void {
+    this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+  }
+
+  confirm(): void {
+    this.modalRef.hide();
+    this.toastr.success('Evento deletado com Sucesso!');
+  }
+ 
+  decline(): void {
+    this.modalRef.hide();
+  }
+
 
   public alternarImagem(): void {
     this.mostrarImagem = !this.mostrarImagem;
@@ -72,7 +99,11 @@ export class EventosComponent implements OnInit {
         this.eventos = _eventos;
         this.eventosFiltrados = this.eventos;
       },
-      error: (error: any) => console.log(error)
+      error: (error: any) => {
+        this.spinner.hide();
+        this.toastr.error('Erro ao carregar os Eventos!', 'Erro!');
+      },
+      complete: () => this.spinner.hide()
     });
   }
 
