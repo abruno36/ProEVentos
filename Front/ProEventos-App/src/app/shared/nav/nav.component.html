@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" [collapse]="isCollapsed" [isAnimated]="true" id="navbarNav">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" aria-current="page" routerLink="eventos/lista">EVENTOS</a>
+          <a class="nav-link" aria-current="page" routerLink="eventos">EVENTOS</a>
         </li>
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="palestrantes">PALESTRANTES</a>
@@ -27,11 +27,11 @@
             Vinícius
           </a>
           <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" routerLink="user/perfil">
+            <a class="dropdown-item" routerLink="perfil">
               Perfil
             </a>
             <div role="separator" class="divider"></div>
-            <a class="dropdown-item" routerLink="user/login">
+            <a class="dropdown-item" href="#">
               Sair
             </a>
           </div>

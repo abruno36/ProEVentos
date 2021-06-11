@@ -8,10 +8,11 @@ import { ContatosComponent } from './components/contatos/contatos.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
 
 const routes: Routes = [
-  { path: 'user/perfil', component: PerfilComponent },
   { path: 'eventos', component: EventosComponent },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'palestrantes', component: PalestrantesComponent },
   { path: 'contatos', component: ContatosComponent },
+  { path: 'perfil', component: PerfilComponent },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
   

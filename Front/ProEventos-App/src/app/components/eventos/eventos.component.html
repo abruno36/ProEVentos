@@ -1,5 +1,4 @@
-<app-titulo [titulo]="'Eventos'" [iconClass]="'fa fa-calendar-alt'" [botaoListar]="true">
-</app-titulo>
+<app-titulo [titulo]="'Eventos'"></app-titulo>
 <hr>
 
 <div class="d-flex">
@@ -15,73 +14,79 @@
     <thead class="thead-dark">
         <tr>
             <th>
-                <button class="btn btn-outline-light" (click)="alternarImagem()">
-                    <i class="{{mostrarImagem ? 'fa fa-eye-slash' : 'fa fa-eye'}}"></i>
-                </button>
-            </th>
-            <th>#</th>
-            <th>Tema</th>
-            <th>Local</th>
-            <th>Data</th>
-            <th>Qtde Pessoas</th>
-            <th>Lote</th>
-            <th colspan="2" class="text-center">Opções</th>
-        </tr>
-    </thead>
-    <tbody *ngIf="eventos && eventos.length">
-        <tr *ngFor="let evento of eventosFiltrados">
-            <td>
-                <img [collapse]="!mostrarImagem" [isAnimated]="true" src="/assets/{{evento.imagemURL}}"
-                [style.width.px]="imagemLargura" [style.margin.px]="imagemMargem">
-            </td>
-            <td>{{evento.id}}</td>
-            <td>{{evento.tema}}</td>
-            <td>{{evento.local}}</td>
-            <td>{{evento.dataEvento}}</td>
-            <td>{{evento.qtdPessoas}}</td>
-            <td>
-                <div *ngIf="!evento.lotes.length">
-                    Não Informado
-                </div>
-                <div *ngIf="evento.lotes.length">
-                    {{evento.lotes[0].nome | uppercase}}
-                </div>
-            </td>
-            <td>
-                <div class="btn-group">
-                    <button class="btn btn-sm btn-success mr-2" tooltip="Editar">
-                        <i class="fa fa-edit"></i>
-                    </button>
-                    <button class="btn btn-sm btn-danger" tooltip="Excluir" (click)="openModal(template)">
-                        <i class="fa fa-eraser"></i>
-                    </button>
-                </div>
-            </td>
-            <td>
-                <a  tooltip="Edição Detalhada" class="btn btn-sm btn-warning">
+                <button type="button" class="btn btn-outline-light btn-sm"
+                (click)="alterarImagem()">
+                <i class="{{!exibirImagem ? 'fa fa-eye' : 'fa fa-eye-slash'}}"></i>
+                {{!exibirImagem ? 'exibir' : 'ocultar'}}
+            </button>
+        </th>
+        <th>#</th>
+        <th>Tema</th>
+        <th>Local</th>
+        <th>Data</th>
+        <th>Qtde Pessoas</th>
+        <th>Lote</th>
+        <th colspan="2" class="text-center">Opções</th>
+    </tr>
+</thead>
+<tbody *ngIf="eventos && eventos.length">
+    <tr *ngFor="let evento of eventosFiltrados">
+        <td>
+            <img [collapse]="!exibirImagem"
+            [isAnimated]="true"
+            src="/assets/{{evento.imagemURL}}"
+            [style.width.px]="larguraImagem"
+            [style.margin.px]="margemImagem"
+            >
+        </td>
+        <td>{{evento.id}}</td>
+        <td>{{evento.tema}}</td>
+        <td>{{evento.local}}</td>
+        <td>{{evento.dataEvento}}</td>
+        <td>{{evento.qtdPessoas}}</td>
+        <td>
+            <div *ngIf="!evento.lotes.length">
+                Não Informado
+            </div>
+            <div *ngIf="evento.lotes.length">
+                {{evento.lotes[0].nome | uppercase}}
+            </div>
+        </td>
+        <td>
+            <div class="btn-group">
+                <button class="btn btn-sm btn-success mr-2" tooltip="Editar">
                     <i class="fa fa-edit"></i>
-                </a>
-            </td>
-        </tr>
-    </tbody>
-    <tfoot *ngIf="!eventos">
-        <tr>
-            <td colspan="7" class="text-center">
-                <h4>
-                    Nenhum evento encontrado!
-                </h4>
-            </td>
-        </tr>
-    </tfoot>
+                </button>
+                <button class="btn btn-sm btn-danger" tooltip="Excluir" (click)="openModal(template)">
+                    <i class="fa fa-eraser"></i>
+                </button>
+            </div>
+        </td>
+        <td>
+            <a  tooltip="Edição Detalhada" class="btn btn-sm btn-warning">
+                <i class="fa fa-edit"></i>
+            </a>
+        </td>
+    </tr>
+</tbody>
+<tfoot *ngIf="!eventos">
+    <tr>
+        <td colspan="7" class="text-center">
+            <h4>
+                Nenhum evento encontrado!
+            </h4>
+        </td>
+    </tr>
+</tfoot>
 </table>
 
 <!-- para saber os nomes dos campo --> 
 <!-- {{eventos | json}} -->
 
 <ng-template #template>
-  <div class="modal-body text-center">
-    <p>Tem certeza que quer deletar este Evento?</p>
-    <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
-    <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
-  </div>
+    <div class="modal-body text-center">
+        <p>Tem certeza que quer deletar este Evento?</p>
+        <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
+        <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
+    </div>
 </ng-template>

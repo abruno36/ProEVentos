@@ -42,8 +42,7 @@ defineLocale('pt-br', ptBrLocale);
     PerfilComponent,
     DateTimeFormatPipe,
     NavComponent,
-    TituloComponent,
-    ContatosComponent
+    TituloComponent
    ],
    schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [

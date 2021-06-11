@@ -7,8 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./titulo.component.scss'],
 })
 export class TituloComponent implements OnInit {
-  @Input()
-  titulo!: string;
+  @Input() titulo!: string;
   @Input() iconClass = 'fa fa-user';
   @Input() subtitulo = 'Desde 2021';
   @Input() botaoListar = false;
