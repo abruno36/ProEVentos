@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark" *ngIf="showMenu()">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm" *ngIf="showMenu()">
   <div class="container">
     <a class="navbar-brand" routerLink="dashboard">
       <i class="fa fa-users mb-2"></i>
@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" [collapse]="isCollapsed" [isAnimated]="true" id="navbarNav">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" aria-current="page" routerLink="eventos">EVENTOS</a>
+          <a class="nav-link" aria-current="page" routerLink="eventos/lista">EVENTOS</a>
         </li>
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="palestrantes">PALESTRANTES</a>
@@ -27,11 +27,11 @@
             Vinícius
           </a>
           <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" routerLink="perfil">
+            <a class="dropdown-item" routerLink="user/perfil">
               Perfil
             </a>
             <div role="separator" class="divider"></div>
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" routerLink="user/login">
               Sair
             </a>
           </div>
