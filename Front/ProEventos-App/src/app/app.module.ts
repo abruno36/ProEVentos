@@ -34,6 +34,7 @@ import { UserComponent } from './components/user/user.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { RegistrationComponent } from './components/user/registration/registration.component';
 import { PerfilComponent } from './components/user/perfil/perfil.component';
+import { NgxMaskModule } from 'ngx-mask';
 
 
 defineLocale('pt-br', ptBrLocale);
@@ -66,6 +67,7 @@ defineLocale('pt-br', ptBrLocale);
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
     TabsModule.forRoot(),
+    NgxMaskModule.forRoot(),
     HttpClientModule,
     BrowserAnimationsModule,
     CollapseModule.forRoot(),
