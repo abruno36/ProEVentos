@@ -40,7 +40,7 @@ export class EventoService {
       .pipe(take(1));
   }
 
-  public put(evento: Evento): Observable<Evento> {
+  public put(id: number, evento: Evento): Observable<Evento> {
     return this.http
       .put<Evento>(`${this.baseURL}/${evento.id}`, evento)
       .pipe(take(1));

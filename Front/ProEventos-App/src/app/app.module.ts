@@ -4,16 +4,18 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { AppRoutingModule } from './app-routing.module';
+import { NgxSpinnerModule } from "ngx-spinner";
+
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { AppRoutingModule } from './app-routing.module';
-import { NgxSpinnerModule } from "ngx-spinner";
 
 import { EventoService } from './services/evento.service';
+import { LoteService } from './services/lote.service';
 
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
@@ -73,13 +75,16 @@ defineLocale('pt-br', ptBrLocale);
     BrowserAnimationsModule,
     CollapseModule.forRoot(),
     ToastrModule.forRoot({
-         timeOut: 4000,
+         timeOut: 3000,
          preventDuplicates: true,
          progressBar: true
       }),
     FormsModule
   ],
-  providers: [EventoService],
+  providers: [
+    EventoService,
+    LoteService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
