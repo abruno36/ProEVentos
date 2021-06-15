@@ -59,7 +59,7 @@ export class EventoDetalheComponent implements OnInit {
     };
   }
 
-    public carregarEvento(): void {
+  public carregarEvento(): void {
     const eventoIdParam = this.router.snapshot.paramMap.get('id');
 
     if (eventoIdParam !== null) {
@@ -107,7 +107,8 @@ export class EventoDetalheComponent implements OnInit {
       qtdPessoas: ['', [Validators.required, Validators.max(120000)]],
       telefone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
-      imagemURL: ['', Validators.required]
+      imagemURL: ['', Validators.required],
+      lotes: this.fb.array([])
     });
   }
 
@@ -124,6 +125,14 @@ export class EventoDetalheComponent implements OnInit {
       dataInicio: [lote.dataInicio],
       dataFim: [lote.dataFim]
     });
+  }
+
+  public mudarValorData(value: Date, indice: number, campo: string): void {
+    this.lotes.value[indice][campo] = value;
+  }
+
+  public retornaTituloLote(nome: string): string {
+    return nome === null || nome === '' ? 'Nome do lote' : nome;
   }
 
   public cssValidator(campoForm: FormControl | AbstractControl): any {
