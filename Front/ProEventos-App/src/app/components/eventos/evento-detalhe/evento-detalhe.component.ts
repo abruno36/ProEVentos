@@ -71,7 +71,7 @@ export class EventoDetalheComponent implements OnInit {
   public carregarEvento(): void {
     const eventoIdParam = this.acvatedRouter.snapshot.paramMap.get('id');
 
-    if (eventoIdParam !== null ) {
+    if (eventoIdParam !== null && this.eventoId !== 0) {
      
       this.spinner.show();
       this.eventoId = +eventoIdParam; 

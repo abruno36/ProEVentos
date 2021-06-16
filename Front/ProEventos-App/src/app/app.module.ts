@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxCurrencyModule } from 'ngx-currency';
 
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -72,6 +73,7 @@ defineLocale('pt-br', ptBrLocale);
     TabsModule.forRoot(),
     NgxMaskModule.forRoot(),
     HttpClientModule,
+    NgxCurrencyModule,
     BrowserAnimationsModule,
     CollapseModule.forRoot(),
     ToastrModule.forRoot({
