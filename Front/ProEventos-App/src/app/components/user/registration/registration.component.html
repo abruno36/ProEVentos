@@ -9,28 +9,18 @@
 
 	<div class="col-md-6">
 
-    <form [formGroup]="form" class="p-1">
+    <form [formGroup]="registerForm" class="p-1">
       <div class="pb-2 d-block d-md-none">
         <h3 class="border-bottom">Cadastro de Usuário</h3>
       </div>
-      <div class="form-row">
-        <div class="form-group col-sm-6">
-          <label>Primeiro Nome</label>
-          <input type="text" class="form-control" formControlName="primeiroNome"
-          [ngClass]="cssValidator(f.primeiroNome)" placeholder="Insira o Primeiro nome" />
+      <div class="form-group">
+          <label>Nome Completo</label>
+          <input type="text" class="form-control" formControlName="fullName"
+          [ngClass]="cssValidator(f.fullName)" placeholder="Insira o nome completo" />
           <div class="invalid-feedback">
-            Primeiro Nome é obrigatório.
+            Nome completo é obrigatório.
           </div>
         </div>
-        <div class="form-group col-sm-6">
-          <label>Último nome</label>
-          <input type="text" class="form-control" formControlName="ultimoNome"
-          [ngClass]="cssValidator(f.ultimoNome)" placeholder="Insira o Último nome" />
-          <div class="invalid-feedback">
-            Último Nome é obrigatório.
-          </div>
-        </div>
-      </div>
       <div class="form-group">
         <label for="">Email:</label>
         <input class="form-control" type="text" formControlName="email"
@@ -54,26 +44,26 @@
       <div class="form-row">
         <div class="form-group col-sm-6">
           <label for="">Senha:</label>
-          <input class="form-control" type="password" formControlName="senha"
-          [ngClass]="cssValidator(f.senha)" placeholder="Digite uma Senha" />
-          <div *ngIf="f.senha.errors?.required && f.senha.touched"
+          <input class="form-control" type="password" formControlName="password"
+          [ngClass]="cssValidator(f.password)" placeholder="Digite uma Senha" />
+          <div *ngIf="f.password.errors?.required && f.password.touched"
           class="invalid-feedback">
             Senha é obrigatório.
           </div>
-          <div *ngIf="f.senha.errors?.minlength && f.senha.touched"
+          <div *ngIf="f.password.errors?.minlength && f.password.touched"
           class="invalid-feedback">
             Deve conter no mínimo 6 caracteres.
           </div>
         </div>
         <div class="form-group col-sm-6">
           <label for="">Confirmar Senha:</label>
-          <input class="form-control" type="password" formControlName="confirmeSenha"
-          [ngClass]="cssValidator(f.confirmeSenha)" placeholder="Confirme a Senha" />
-          <div *ngIf="f.confirmeSenha.errors?.required"
+          <input class="form-control" type="password" formControlName="confirmPassword"
+          [ngClass]="cssValidator(f.confirmPassword)" placeholder="Confirme a Senha" />
+          <div *ngIf="f.confirmPassword.errors?.required"
             class="invalid-feedback">
             Confirmar Senha é obrigatório.
           </div>
-          <div *ngIf="f.confirmeSenha.errors?.mustMatch"
+          <div *ngIf="f.confirmPassword.errors?.mustMatch"
             class="invalid-feedback">
             Confirmar Senha deve ser igual a Senha.
           </div>
@@ -87,8 +77,9 @@
       </div>
       <div class="form-row">
         <div class="form-group col-12">
-          <button class="btn btn-lg btn-success btn-block px-5"  [disabled]="!form.valid">
-            Registar
+          <button class="btn btn-lg btn-success btn-block px-5"  [disabled]="!registerForm.valid" 
+          (click)="cadastrarUsuario()">
+            Registrar
           </button>
         </div>
       </div>
@@ -100,7 +91,6 @@
         </div>
       </div>
     </form>
-
 	</div>
 </div>
 

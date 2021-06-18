@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '@app/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -7,9 +10,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  titulo = 'Login';
+  model: any = {};
 
-  ngOnInit(): void {
+  constructor(private authService: AuthService
+    , public router: Router
+    , private toastr: ToastrService) { }
+
+  ngOnInit() {
+    if (localStorage.getItem('token') != null) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
+
+  login() {
+    this.authService.login(this.model)
+      .subscribe(
+        () => {
+          this.router.navigate(['/dashboard']);
+          this.toastr.success('Logado com Sucesso');
+        },
+        error => {
+          this.toastr.error('Falha ao tentar Logar');
+        }
+      );
   }
 
 }

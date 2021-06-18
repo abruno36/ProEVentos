@@ -49,7 +49,6 @@ defineLocale('pt-br', ptBrLocale);
     PalestrantesComponent,
     ContatosComponent,
     DashboardComponent,
-    PerfilComponent,
     DateTimeFormatPipe,
     NavComponent,
     TituloComponent,
@@ -57,6 +56,7 @@ defineLocale('pt-br', ptBrLocale);
     EventoListaComponent,
     UserComponent,
     LoginComponent,
+    PerfilComponent,
     RegistrationComponent
    ],
    schemas: [ CUSTOM_ELEMENTS_SCHEMA ],

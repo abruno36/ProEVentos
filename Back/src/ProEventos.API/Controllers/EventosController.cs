@@ -5,6 +5,8 @@ using ProEventos.Application.Contratos;
 using Microsoft.AspNetCore.Http;
 using ProEventos.Application.Dtos;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace ProEventos.API.Controllers
 {
@@ -36,6 +38,36 @@ namespace ProEventos.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
                     $"Erro ao tentar recuperar eventos. Erro: {ex.Message}");
             }
+        }
+
+         [HttpPost("upload")]
+        public async Task<IActionResult> Upload()
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+                var folderName = Path.Combine("Resources", "Images");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                if (file.Length > 0)
+                {
+                    var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName;
+                    var fullPath = Path.Combine(pathToSave, filename.Replace("\"", " ").Trim());
+                    
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Banco Dados Falhou {ex.Message}");
+            }
+
+            return BadRequest("Erro ao tentar realizar upload");
         }
 
         [HttpGet("{id}")]

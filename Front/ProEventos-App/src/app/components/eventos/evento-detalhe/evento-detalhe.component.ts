@@ -27,11 +27,16 @@ export class EventoDetalheComponent implements OnInit {
   modalRef!: BsModalRef;
   eventoId!: number;
   evento = {} as Evento;
+  eventosFiltrados: Evento[];
+  eventos: Evento[];
   form!: FormGroup;
   registerForm!: FormGroup;
   estadoSalvar = 'post';
   loteAtual = {id: 0, nome: '', indice: 0};
   eventoIdParam = '';
+  file: File;
+  fileNameToUpdate: string;
+  dataAtual: string;
 
   get modoEditar(): boolean {
     return this.estadoSalvar === 'put';
@@ -149,6 +154,35 @@ export class EventoDetalheComponent implements OnInit {
       return {'is-invalid': campoForm.errors && campoForm.touched};
   }  
 
+   uploadImagem() {
+    if (this.estadoSalvar === 'post') {
+      
+        const nomeArquivo = this.evento.imagemURL.split('\\', 3);
+        this.evento.imagemURL = nomeArquivo[2];
+
+        console.log(nomeArquivo);
+        console.log(this.evento.imagemURL);
+        
+        this.eventoService.postUpload(this.file, nomeArquivo[2])
+          .subscribe(
+            () => {
+              this.dataAtual = new Date().getMilliseconds().toString();
+              this.getEventos();
+            }
+          );
+    } else {
+        
+        this.evento.imagemURL = this.fileNameToUpdate;
+        this.eventoService.postUpload(this.file, this.fileNameToUpdate)
+          .subscribe(
+            () => {
+              this.dataAtual = new Date().getMilliseconds().toString();
+              this.getEventos();
+            }
+          );
+    }
+  }
+
   public salvarEvento(): void {
     this.spinner.show();
     if (this.form.valid) {
@@ -156,6 +190,9 @@ export class EventoDetalheComponent implements OnInit {
       if (this.estadoSalvar === 'post')
       {
         this.evento = {...this.form.value}
+
+        this.uploadImagem();
+
         this.eventoService.post(this.evento).subscribe(
         (eventoRetorno: Evento) => {
           this.toastr.success('Evento salvo com Sucesso!', 'Sucesso');
@@ -170,6 +207,9 @@ export class EventoDetalheComponent implements OnInit {
       );
       } else {
         this.evento = {id: this.evento.id,...this.form.value}
+
+        this.uploadImagem();
+
         this.eventoService.put(this.evento).subscribe(
         (eventoRetorno: Evento) => {
           this.toastr.success('Evento salvo com Sucesso!', 'Sucesso');
@@ -228,6 +268,28 @@ export class EventoDetalheComponent implements OnInit {
           console.error(error);
         }
       ).add(() => this.spinner.hide());
+  }
+
+  onFileChange(event) {
+    const reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      this.file = event.target.files;
+      console.log(this.file);
+    }
+  }
+
+   getEventos() {
+    this.dataAtual = new Date().getMilliseconds().toString();
+
+    this.eventoService.getAllEvento().subscribe(
+      (_eventos: Evento[]) => {
+        this.eventos = _eventos;
+        this.eventosFiltrados = this.eventos;
+        console.log(this.eventos);
+      }, error => {
+        this.toastr.error(`Erro ao tentar Carregar eventos: ${error}`);
+      });
   }
 
   declineDeleteLote(): void {

@@ -1,5 +1,5 @@
 import { Evento } from './../models/Evento';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -9,16 +9,23 @@ import { take } from 'rxjs/operators';
 )
 export class EventoService {
   baseURL = 'https://localhost:5001/api/eventos';
+  tokenHeader: HttpHeaders;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.tokenHeader = new HttpHeaders({'Authorization': `Bearer ${localStorage.getItem('token')}`})
+  }
 
   //public getEventos(): Observable<Evento[]> {
   //  return this.http.get<Evento[]>(this.baseURL).pipe(take(1));
   //}
 
+  public getAllEvento(): Observable<Evento[]> {
+        return this.http.get<Evento[]>(this.baseURL,  {headers: this.tokenHeader});
+  }
+
   public getEventos(): Observable<Evento[]> {
     return this.http
-      .get<Evento[]>(this.baseURL)
+      .get<Evento[]>(this.baseURL, {headers: this.tokenHeader})
       .pipe(take(1));
   }
 
@@ -34,9 +41,17 @@ export class EventoService {
       .pipe(take(1));
   }
 
+   postUpload(file: File, name: string) {
+    const fileToUplaod = <File>file[0];
+    const formData = new FormData();
+    formData.append('file', fileToUplaod, name);
+
+    return this.http.post(`${this.baseURL}/upload`, formData, {headers: this.tokenHeader} );
+  }
+
   public post(evento: Evento): Observable<Evento> {
     return this.http
-      .post<Evento>(this.baseURL, evento)
+      .post<Evento>(this.baseURL, evento,  {headers: this.tokenHeader})
       .pipe(take(1));
   }
 
