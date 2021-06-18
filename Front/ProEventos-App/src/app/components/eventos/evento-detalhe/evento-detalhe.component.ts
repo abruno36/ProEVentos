@@ -85,6 +85,7 @@ export class EventoDetalheComponent implements OnInit {
       this.eventoService.getEventoById(+eventoIdParam).subscribe(
         (evento: Evento) => {
           this.evento = {...evento};
+          this.evento.imagemURL = '';
           this.form.patchValue(this.evento);
           this.carregarLotes();
         },
@@ -155,8 +156,6 @@ export class EventoDetalheComponent implements OnInit {
   }  
 
    uploadImagem() {
-    if (this.estadoSalvar === 'post') {
-      
         const nomeArquivo = this.evento.imagemURL.split('\\', 3);
         this.evento.imagemURL = nomeArquivo[2];
 
@@ -170,19 +169,8 @@ export class EventoDetalheComponent implements OnInit {
               this.getEventos();
             }
           );
-    } else {
-        
-        this.evento.imagemURL = this.fileNameToUpdate;
-        this.eventoService.postUpload(this.file, this.fileNameToUpdate)
-          .subscribe(
-            () => {
-              this.dataAtual = new Date().getMilliseconds().toString();
-              this.getEventos();
-            }
-          );
-    }
-  }
-
+  } 
+  
   public salvarEvento(): void {
     this.spinner.show();
     if (this.form.valid) {

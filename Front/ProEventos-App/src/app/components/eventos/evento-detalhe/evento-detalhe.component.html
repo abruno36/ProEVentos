@@ -166,7 +166,7 @@
 									<label>Data Início</label>
 									<input type="text" class="form-control"
 									bsDatepicker 
-									value="{{lotes.get(i+'.dataInicio').value | date:'dd/MM/yyyy'}}"
+									value="{{lotes.get(i+'.dataInicio').value}}"
 									(bsValueChange)="mudarValorData($event, i, 'dataInicio')"
 									placeholder="01/01/2019">
 								</div>
@@ -174,7 +174,7 @@
 									<label>Data Fim</label>
 									<input type="text" class="form-control" 
 									bsDatepicker
-									value="{{lotes.get(i+'.dataFim').value | date:'dd/MM/yyyy'}}"
+									value="{{lotes.get(i+'.dataFim').value}}"
 									placeholder="01/01/2019"
 									(bsValueChange)="mudarValorData($event, i, 'dataFim')">
 								</div>
