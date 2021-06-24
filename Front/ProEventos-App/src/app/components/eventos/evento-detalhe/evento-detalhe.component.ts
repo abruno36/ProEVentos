@@ -17,6 +17,7 @@ import { Evento } from '@app/models/Evento';
 import { Lote } from '@app/models/Lote';
 import { EventoService } from '@app/services/evento.service';
 import { LoteService } from '@app/services/lote.service';
+import { environment } from '@environments/environment';
 @Component({
   selector: 'app-evento-detalhe',
   templateUrl: './evento-detalhe.component.html',
@@ -37,6 +38,7 @@ export class EventoDetalheComponent implements OnInit {
   file: File;
   fileNameToUpdate: string;
   dataAtual: string;
+  imagemURL = 'assets/img/upload.png';
 
   get modoEditar(): boolean {
     return this.estadoSalvar === 'put';
@@ -64,7 +66,7 @@ export class EventoDetalheComponent implements OnInit {
     , private spinner: NgxSpinnerService
     , private fb: FormBuilder
     , private modalService: BsModalService
-    , private acvatedRouter: ActivatedRoute
+    , private activatedRouter: ActivatedRoute
     , private localeService: BsLocaleService
     , private toastr: ToastrService
     , private router: Router
@@ -74,26 +76,30 @@ export class EventoDetalheComponent implements OnInit {
 
 
   public carregarEvento(): void {
-    const eventoIdParam = this.acvatedRouter.snapshot.paramMap.get('id');
+     this.eventoId = +this.activatedRouter.snapshot.paramMap.get('id');
 
-    if (eventoIdParam !== null && this.eventoId !== 0) {
-     
+    if (this.eventoId !== null && this.eventoId !== 0) {
       this.spinner.show();
-      this.eventoId = +eventoIdParam; 
+
       this.estadoSalvar = 'put';
 
-      this.eventoService.getEventoById(+eventoIdParam).subscribe(
-        (evento: Evento) => {
-          this.evento = {...evento};
-          this.evento.imagemURL = '';
-          this.form.patchValue(this.evento);
-          this.carregarLotes();
-        },
-        (error: any) => {
-          this.toastr.error('Erro ao tentar carregar Evento.', 'Erro!');
-          console.error(error);
-        }
-      ).add(() => this.spinner.hide());
+      this.eventoService
+        .getEventoById(this.eventoId)
+        .subscribe(
+          (evento: Evento) => {
+            this.evento = { ...evento };
+            this.form.patchValue(this.evento);
+            if (this.evento.imagemURL !== '') {
+              this.imagemURL = environment.apiURL + 'resources/images/' + this.evento.imagemURL;
+            }
+            this.carregarLotes();
+          },
+          (error: any) => {
+            this.toastr.error('Erro ao tentar carregar Evento.', 'Erro!');
+            console.error(error);
+          }
+        )
+        .add(() => this.spinner.hide());
     }
   }
 
@@ -123,7 +129,7 @@ export class EventoDetalheComponent implements OnInit {
       qtdPessoas: ['', [Validators.required, Validators.max(120000)]],
       telefone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
-      imagemURL: ['', Validators.required],
+      imagemURL: [''],
       lotes: this.fb.array([])
     });
   }
@@ -155,33 +161,40 @@ export class EventoDetalheComponent implements OnInit {
       return {'is-invalid': campoForm.errors && campoForm.touched};
   }  
 
-   uploadImagem() {
-        const nomeArquivo = this.evento.imagemURL.split('\\', 3);
-        this.evento.imagemURL = nomeArquivo[2];
+ onFileChange(ev: any): void {
+    const reader = new FileReader();
 
-        console.log(nomeArquivo);
-        console.log(this.evento.imagemURL);
-        
-        this.eventoService.postUpload(this.file, nomeArquivo[2])
-          .subscribe(
-            () => {
-              this.dataAtual = new Date().getMilliseconds().toString();
-              this.getEventos();
-            }
-          );
-  } 
+    reader.onload = (event: any) => this.imagemURL = event.target.result;
+
+    this.file = ev.target.files;
+    reader.readAsDataURL(this.file[0]);
+
+    this.uploadImagem();
+  }
+
+  uploadImagem(): void {
+    this.spinner.show();
+    this.eventoService.postUpload(this.eventoId, this.file).subscribe(
+      () => {
+        this.carregarEvento();
+        this.toastr.success('Imagem atualizada com Sucesso', 'Sucesso!');
+      },
+      (error: any) => {
+        this.toastr.error('Erro ao fazer upload de imagem', 'Erro!');
+        console.log(error);
+      }
+    ).add(() => this.spinner.hide());
+  }
   
   public salvarEvento(): void {
     this.spinner.show();
     if (this.form.valid) {
+      this.evento =
+        this.estadoSalvar === 'post'
+          ? { ...this.form.value }
+          : { id: this.evento.id, ...this.form.value };
 
-      if (this.estadoSalvar === 'post')
-      {
-        this.evento = {...this.form.value}
-
-        this.uploadImagem();
-
-        this.eventoService.post(this.evento).subscribe(
+      this.eventoService[this.estadoSalvar](this.evento).subscribe(
         (eventoRetorno: Evento) => {
           this.toastr.success('Evento salvo com Sucesso!', 'Sucesso');
           this.router.navigate([`eventos/detalhe/${eventoRetorno.id}`]);
@@ -193,24 +206,6 @@ export class EventoDetalheComponent implements OnInit {
         },
         () => this.spinner.hide()
       );
-      } else {
-        this.evento = {id: this.evento.id,...this.form.value}
-
-        this.uploadImagem();
-
-        this.eventoService.put(this.evento).subscribe(
-        (eventoRetorno: Evento) => {
-          this.toastr.success('Evento salvo com Sucesso!', 'Sucesso');
-          this.router.navigate([`eventos/detalhe/${eventoRetorno.id}`]);
-        },
-        (error: any) => {
-          console.error(error);
-          this.spinner.hide();
-          this.toastr.error('Error ao alterar evento', 'Erro');
-        },
-        () => this.spinner.hide()
-      );
-      }
     }
   }
 
@@ -256,15 +251,6 @@ export class EventoDetalheComponent implements OnInit {
           console.error(error);
         }
       ).add(() => this.spinner.hide());
-  }
-
-  onFileChange(event) {
-    const reader = new FileReader();
-
-    if (event.target.files && event.target.files.length) {
-      this.file = event.target.files;
-      console.log(this.file);
-    }
   }
 
    getEventos() {
