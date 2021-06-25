@@ -86,6 +86,8 @@
       </form>
     </div>
     <div class="card rounded shadow-sm mt-3" *ngIf="modoEditar">
+      <!-- <p>Form value: {{form.controls.lotes.value | json}}</p>
+  <p>Form valid: {{form.controls.lotes.status | json}}</p> -->
       <div class="p-3">
         <div class="d-flex border-bottom">
           <h2 class="mr-auto">
@@ -139,7 +141,7 @@
                   <label>Data Início</label>
                   <input type="datetime" class="form-control"
                   bsDatepicker
-                  value="{{lotes.get(i+'.dataInicio').value | date:'dd/MM/yyyy'}}"
+                  value="{{lotes.get(i+'.dataInicio').value}}"
                   placeholder="01/01/2019"
                   (bsValueChange)="mudarValorData($event, i, 'dataInicio')">
                 </div>
@@ -147,7 +149,7 @@
                   <label>Data Fim</label>
                   <input type="datetime" class="form-control"
                   bsDatepicker
-                  value="{{lotes.get(i+'.dataFim').value | date:'dd/MM/yyyy'}}"
+                  value="{{lotes.get(i+'.dataFim').value }}"
                   placeholder="01/01/2019"
                   (bsValueChange)="mudarValorData($event, i, 'dataFim')">
                 </div>

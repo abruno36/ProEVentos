@@ -89,6 +89,7 @@ export class EventoDetalheComponent implements OnInit {
           (evento: Evento) => {
             this.evento = { ...evento };
             this.form.patchValue(this.evento);
+            
             if (this.evento.imagemURL !== '') {
               this.imagemURL = environment.apiURL + 'resources/images/' + this.evento.imagemURL;
             }
@@ -121,7 +122,8 @@ export class EventoDetalheComponent implements OnInit {
      this.carregarEvento();
      this.validation();
   }
-    public validation() {
+  
+  public validation() {
     this.form = this.fb.group({
       tema: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
       local: ['', Validators.required],
@@ -216,7 +218,6 @@ export class EventoDetalheComponent implements OnInit {
         .subscribe(
           () => {
             this.toastr.success('Lotes salvos com Sucesso!', 'Sucesso!');
-            this.lotes.reset();
           },
           (error: any) => {
             this.toastr.error('Erro ao tentar salvar lotes.', 'Erro');
